@@ -75,7 +75,9 @@ def main():
         return
 
     try:
-        payload = json.load(sys.stdin)
+        # Decode stdin as UTF-8 explicitly rather than trusting the locale.
+        # A mis-decoded delta corrupts every non-ASCII character in the message.
+        payload = json.loads(sys.stdin.buffer.read().decode("utf-8"))
     except Exception:
         return
 

@@ -67,7 +67,13 @@ function AsciiJson($obj) {
 }
 
 try {
-    $raw = [Console]::In.ReadToEnd()
+    # Read stdin as UTF-8 explicitly. [Console]::In uses the console code page,
+    # which on a cp437/cp850 box silently mangles every non-ASCII character in
+    # the message: an em dash round-trips to "ΓÇö", an accented e to "├⌐".
+    $stdinStream = [Console]::OpenStandardInput()
+    $reader = New-Object System.IO.StreamReader(
+        $stdinStream, (New-Object System.Text.UTF8Encoding($false)))
+    $raw = $reader.ReadToEnd()
     if (-not $raw) { exit 0 }
     $p = $raw | ConvertFrom-Json
 } catch { exit 0 }

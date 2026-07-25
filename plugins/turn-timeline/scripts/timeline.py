@@ -45,6 +45,14 @@ def clock(dt):
 
 
 def main():
+    # Prompt snippets routinely contain non-ASCII. Python defaults stdout to the
+    # locale code page, which is cp1252 on Windows, so a single box-drawing
+    # character in a pasted prompt would otherwise kill the whole report.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
     path = sys.argv[1] if len(sys.argv) > 1 else newest_transcript()
 
     records = []

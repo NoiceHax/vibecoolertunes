@@ -1,0 +1,58 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "command": "sh",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/play.sh", "complete"]
+          },
+          {
+            "type": "command",
+            "async": true,
+            "command": "powershell",
+            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/play.ps1", "complete"]
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "command": "sh",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/play.sh", "permission"]
+          },
+          {
+            "type": "command",
+            "async": true,
+            "command": "powershell",
+            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/play.ps1", "permission"]
+          }
+        ]
+      },
+      {
+        "matcher": "idle_prompt|agent_needs_input|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "command": "sh",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/play.sh", "question"]
+          },
+          {
+            "type": "command",
+            "async": true,
+            "command": "powershell",
+            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/play.ps1", "question"]
+          }
+        ]
+      }
+    ]
+  }
+}

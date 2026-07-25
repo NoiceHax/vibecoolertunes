@@ -1,0 +1,14 @@
+{
+  "name": "notification-tones",
+  "description": "Audible, semantically distinct notification tones for Claude Code.",
+  "owner": {
+    "name": "NoiceHax"
+  },
+  "plugins": [
+    {
+      "name": "notification-tones",
+      "source": "./plugins/notification-tones",
+      "description": "Distinct musical tones for each reason Claude Code stops, so you can tell from another room whether it finished, needs permission, or is waiting on an answer."
+    }
+  ]
+}

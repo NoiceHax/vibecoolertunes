@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "notification-tones",
+  "displayName": "Notification Tones",
+  "description": "Distinct musical tones for each reason Claude Code stops, so you can tell from another room whether it finished, needs permission, or is waiting on an answer.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "NoiceHax"
+  },
+  "homepage": "https://github.com/NoiceHax/claude-notification-tones",
+  "repository": "https://github.com/NoiceHax/claude-notification-tones",
+  "keywords": ["notifications", "sound", "audio", "hooks", "accessibility", "attention"],
+  "userConfig": {
+    "only_when_unfocused": {
+      "type": "boolean",
+      "title": "Only play when the terminal is not focused",
+      "description": "Stay silent while you are looking at the terminal, since you can already see what happened. Set false to always play. When focus cannot be determined the tone plays anyway.",
+      "default": true
+    },
+    "task_complete_tone": {
+      "type": "boolean",
+      "title": "Play a tone when a task completes",
+      "description": "The completion tone fires at the end of every turn, including short answers. Turn this off to keep only the permission and question tones.",
+      "default": true
+    },
+    "question_style": {
+      "type": "string",
+      "title": "Question tone voicing",
+      "description": "ascending-pause (E5, pause, G#5) or descending (G#5 to E5). Both signal 'your turn'; pick whichever reads that way to your ear.",
+      "default": "ascending-pause"
+    }
+  }
+}

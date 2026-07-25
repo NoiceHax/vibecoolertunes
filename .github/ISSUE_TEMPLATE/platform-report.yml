@@ -1,0 +1,72 @@
+name: macOS / Linux test report
+description: Tell us how notification-tones behaved on your machine
+title: "[platform] "
+labels: ["platform-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing. The Windows path is verified on real hardware; the
+        macOS and Linux paths are not, so this report is genuinely useful even
+        if everything worked.
+
+        **Run this first and paste the whole thing below:**
+
+        ```sh
+        sh plugins/notification-tones/scripts/diagnose.sh
+        ```
+
+        It reports your OS, terminal, which audio players you have, and the raw
+        output of the focus-detection commands. It does not read file contents
+        or dump your environment.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - macOS
+        - Linux (X11)
+        - Linux (Wayland)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: What happened
+      options:
+        - No sound at all, ever
+        - Sound plays, but also when the terminal IS focused
+        - Silent even when the terminal is NOT focused
+        - Sound plays but is distorted, clipped, or cut off
+        - Everything worked correctly
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostic
+    attributes:
+      label: diagnose.sh output
+      description: Paste the full report, including the bracketed [raw] lines.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: terminal
+    attributes:
+      label: Which terminal app
+      description: Terminal.app, iTerm2, Ghostty, Kitty, WezTerm, VS Code, GNOME Terminal, tmux, and so on. Mention if you had more than one terminal window open.
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Optional. If a tone played at the wrong moment, say what you were doing.
+    validations:
+      required: false

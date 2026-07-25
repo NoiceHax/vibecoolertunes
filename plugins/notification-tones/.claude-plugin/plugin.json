@@ -8,8 +8,8 @@
   "author": {
     "name": "NoiceHax"
   },
-  "homepage": "https://github.com/NoiceHax/claude-notification-tones",
-  "repository": "https://github.com/NoiceHax/claude-notification-tones",
+  "homepage": "https://github.com/NoiceHax/vibecoolertunes",
+  "repository": "https://github.com/NoiceHax/vibecoolertunes",
   "keywords": ["notifications", "sound", "audio", "hooks", "accessibility", "attention"],
   "userConfig": {
     "only_when_unfocused": {

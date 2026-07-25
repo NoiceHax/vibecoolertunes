@@ -1,4 +1,4 @@
-# claude-notification-tones
+# vibecoolertunes
 
 A Claude Code plugin that gives a **distinct musical tone to each reason Claude
 stops**, so you can tell from another room whether it finished, needs
@@ -19,8 +19,8 @@ Full docs: [plugins/notification-tones/README.md](plugins/notification-tones/REA
 ## Install
 
 ```
-/plugin marketplace add NoiceHax/claude-notification-tones
-/plugin install notification-tones@notification-tones
+/plugin marketplace add NoiceHax/vibecoolertunes
+/plugin install notification-tones@vibecoolertunes
 /reload-plugins
 /notification-tones:preview
 ```
@@ -54,8 +54,8 @@ looking at the terminal. Nothing should crash or go permanently quiet.
 ### How to help
 
 ```sh
-git clone https://github.com/NoiceHax/claude-notification-tones
-cd claude-notification-tones
+git clone https://github.com/NoiceHax/vibecoolertunes
+cd vibecoolertunes
 sh plugins/notification-tones/scripts/diagnose.sh
 ```
 
@@ -63,7 +63,7 @@ The diagnostic prints your OS, terminal, available audio players, the **raw**
 output of each focus-detection command, and your process ancestry, then plays a
 tone. It reads no file contents and does not dump your environment.
 
-Then [open an issue](https://github.com/NoiceHax/claude-notification-tones/issues/new?template=platform-report.yml)
+Then [open an issue](https://github.com/NoiceHax/vibecoolertunes/issues/new?template=platform-report.yml)
 and paste the output. Reports are useful **even when everything worked**, since
 that is exactly the confirmation that is missing right now.
 

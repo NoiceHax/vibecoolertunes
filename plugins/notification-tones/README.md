@@ -20,8 +20,8 @@ square-wave beep. Peak amplitude is normalised to 0.55, deliberately quiet.
 ## Install
 
 ```
-/plugin marketplace add NoiceHax/claude-notification-tones
-/plugin install notification-tones@notification-tones
+/plugin marketplace add NoiceHax/vibecoolertunes
+/plugin install notification-tones@vibecoolertunes
 /reload-plugins
 ```
 

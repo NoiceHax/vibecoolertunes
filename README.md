@@ -1,5 +1,23 @@
 # vibecoolertunes
 
+Quality-of-life plugins for Claude Code. Two so far:
+
+| Plugin | What it does |
+| :--- | :--- |
+| [**notification-tones**](plugins/notification-tones) | A distinct musical tone for each reason Claude Code stops, played only when the terminal lacks focus |
+| [**turn-timeline**](plugins/turn-timeline) | Adds the wall-clock range to Claude Code's turn output, plus a `/timeline` report over any past session |
+
+```
+/plugin marketplace add NoiceHax/vibecoolertunes
+/plugin install notification-tones@vibecoolertunes
+/plugin install turn-timeline@vibecoolertunes
+/reload-plugins
+```
+
+---
+
+# notification-tones
+
 **Distinct musical tones for each reason Claude Code stops.**
 
 A single alert tells you *something* happened. It does not tell you whether it is
@@ -330,6 +348,13 @@ plugins/notification-tones/
 ├── skills/preview/SKILL.md          /notification-tones:preview
 ├── sounds/*.wav                     4 pre-rendered tones
 └── tools/gen_tones.py               stdlib-only renderer
+plugins/turn-timeline/
+├── .claude-plugin/plugin.json       manifest and userConfig schema
+├── hooks/hooks.json                 UserPromptSubmit + MessageDisplay wiring
+├── scripts/stamp.py                 macOS and Linux stamp
+├── scripts/stamp.ps1                Windows stamp
+├── scripts/timeline.py              /timeline report, stdlib only
+└── skills/timeline/SKILL.md         /turn-timeline:timeline
 ```
 
 ---

@@ -9,6 +9,11 @@
       "name": "notification-tones",
       "source": "./plugins/notification-tones",
       "description": "Distinct musical tones for each reason Claude Code stops, so you can tell from another room whether it finished, needs permission, or is waiting on an answer."
+    },
+    {
+      "name": "turn-timeline",
+      "source": "./plugins/turn-timeline",
+      "description": "Adds the wall-clock range to Claude Code's turn output, so you see not just how long a turn took but from when to when. Includes a /timeline report over any past session."
     }
   ]
 }

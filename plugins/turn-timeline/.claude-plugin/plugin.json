@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "turn-timeline",
+  "displayName": "Turn Timeline",
+  "description": "Adds the wall-clock range to Claude Code's turn output, so you see not just how long a turn took but from when to when. Includes a /timeline report over any past session.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "NoiceHax"
+  },
+  "homepage": "https://github.com/NoiceHax/vibecoolertunes",
+  "repository": "https://github.com/NoiceHax/vibecoolertunes",
+  "keywords": ["timing", "hooks", "analytics", "timeline", "productivity"],
+  "userConfig": {
+    "show_duration": {
+      "type": "boolean",
+      "title": "Include the duration in the stamp",
+      "description": "Claude Code already prints its own 'Baked for Xm Ys' line just below this one, and the two are measured at slightly different moments, so they can disagree by a second. Set false to show only the time range.",
+      "default": true
+    },
+    "closing_line": {
+      "type": "boolean",
+      "title": "Add a closing flourish",
+      "description": "Appends a short phrase such as 'still warm' or 'no notes'. Set false for just the times.",
+      "default": true
+    },
+    "clock_format": {
+      "type": "string",
+      "title": "Clock format",
+      "description": "12 for 3:06:09 pm, or 24 for 15:06:09.",
+      "default": "12"
+    }
+  }
+}

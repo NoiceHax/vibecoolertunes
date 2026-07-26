@@ -385,8 +385,8 @@ Python 3.
 
 ## 🧪 Testing needed
 
-**Status: `v0.1.0`. Windows is verified on real hardware. macOS and Linux are
-not.**
+**Status: `notification-tones` v0.2.1, `turn-timeline` v0.3.1. Windows is
+verified on real hardware. macOS and Linux are not.**
 
 The POSIX path passes syntax checks under `sh`, `bash`, and `dash`, and every
 branch was tested against stubbed platform tools, including the player fallback

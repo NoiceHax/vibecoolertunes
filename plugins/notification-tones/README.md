@@ -30,6 +30,15 @@ Set via `/plugin configure notification-tones@vibecoolertunes`, then
 | `task_complete_tone` | `true` | Set `false` to drop the end-of-turn tone, which fires on every turn. |
 | `question_style` | `ascending-pause` | Set `descending` for G♯5 → E5 instead. |
 
+## Requirements
+
+`node` must be on your PATH. The hook invokes one Node script which then picks
+the platform's audio player, because Claude Code prints a visible
+`Executable not found in $PATH` error whenever a hook command does not resolve,
+and no hook form suppresses it. Playback itself uses `afplay` on macOS, the
+first of `paplay`/`pw-play`/`aplay`/`ffplay` on Linux, and PowerShell on
+Windows.
+
 ## Troubleshooting
 
 Set `CCTONES_DEBUG=1` and the scripts print exactly why a tone did or did not

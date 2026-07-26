@@ -200,12 +200,24 @@ the `Notification` event. The question matcher covers
 `idle_prompt|agent_needs_input|elicitation_dialog` so it catches subagent
 questions and MCP elicitation dialogs as well as ordinary prompts.
 
-**One plugin, three operating systems.** Each event registers *two* hook entries,
-one invoking `sh` and one invoking `powershell`. The wrong-platform entry fails
-to exec and Claude Code treats that as a non-blocking error, so it is silent.
-This avoids OS detection entirely and means there is no platform branch to get
-wrong. If you run `/reload-plugins` you will see `6 hooks` load, which is three
-events times two entries.
+**One plugin, three operating systems.** Every hook invokes a single command,
+`node`, and the platform-specific work happens inside that script.
+
+This is not the obvious design, and the obvious one is wrong. Registering two
+entries per event, one `sh` and one `powershell`, and letting the wrong-platform
+one fail, looks like it should work. It does not: Claude Code resolves a hook's
+command against the real PATH and prints a visible
+`Executable not found in $PATH` error every time it misses. Measured against a
+missing binary, exec form, shell form, `shell: bash` and `shell: powershell` all
+produce that error. None of them suppresses it.
+
+So the command has to exist *and* succeed everywhere. `node` is the only
+interpreter that qualifies for a Claude Code user, and inside it a missing audio
+player or interpreter is a catchable spawn error rather than a hook failure.
+
+On Windows this matters more than it sounds: `sh` is absent from the PATH Claude
+Code spawns with even when Git Bash is installed, because `/usr/bin/sh` exists
+only inside MSYS's own view of the filesystem.
 
 **Exec form, not shell form.** Hooks use `command` plus `args` rather than a
 shell string. `${CLAUDE_PLUGIN_ROOT}` is passed as a single argument with no
@@ -342,6 +354,7 @@ Nothing is left behind outside the plugin cache.
 plugins/notification-tones/
 ├── .claude-plugin/plugin.json       manifest, version, userConfig schema
 ├── hooks/hooks.json                 Stop + Notification event wiring
+├── scripts/dispatch.js              hook entry point, picks the player
 ├── scripts/play.sh                  macOS and Linux playback + focus check
 ├── scripts/play.ps1                 Windows playback + focus check
 ├── scripts/diagnose.sh              tester diagnostic report
@@ -351,11 +364,22 @@ plugins/notification-tones/
 plugins/turn-timeline/
 ├── .claude-plugin/plugin.json       manifest and userConfig schema
 ├── hooks/hooks.json                 UserPromptSubmit + MessageDisplay wiring
-├── scripts/stamp.py                 macOS and Linux stamp
-├── scripts/stamp.ps1                Windows stamp
+├── scripts/stamp.js                 hook entry point, pure Node
 ├── scripts/timeline.py              /timeline report, stdlib only
 └── skills/timeline/SKILL.md         /turn-timeline:timeline
 ```
+
+## Requirements
+
+`node` must be on your PATH. Every hook in both plugins runs through it, for the
+reasons in [How it works](#how-it-works). It is present for anyone who installed
+Claude Code through npm; if you used the native installer and have no separate
+Node, the hooks report `Executable not found in $PATH: "node"`. Tell us if that
+is you, it is worth knowing how common it is.
+
+Beyond that, `notification-tones` needs an audio player (built in on Windows and
+macOS, `pulseaudio-utils` or `alsa-utils` on Linux), and `/timeline` needs
+Python 3.
 
 ---
 

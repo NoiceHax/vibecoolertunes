@@ -87,18 +87,25 @@ Set via `/plugin configure turn-timeline@vibecoolertunes`, then
 
 ## Requirements
 
-| Platform | Runtime | Notes |
-| :--- | :--- | :--- |
-| macOS, Linux | `sh` + `python3` (or `python`) | Both normally present |
-| Windows | PowerShell | Built in |
+**`node` on your PATH**, on every platform. The stamp is a single Node script
+and the hook invokes it directly.
 
-The POSIX hook entry invokes `sh`, which then locates Python, rather than
-invoking `python3` directly. Naming `python3` as the hook command makes Claude
-Code report a visible `Executable not found in $PATH: "python3"` error on every
-prompt on Windows, where that name does not resolve. Going through `sh` keeps
-that case quiet.
+That is a deliberate choice rather than a preference. Claude Code resolves a
+hook's command against the real PATH and prints a visible
+`Executable not found in $PATH` error every time it misses, on every matching
+event. Naming `python3` produced that error on Windows, where it is only a Store
+app-execution alias. Naming `sh` produced it too, because Git Bash's
+`/usr/bin/sh` exists only inside MSYS's own view and never reaches the PATH
+Claude Code spawns with. Exec form, shell form, `shell: bash` and
+`shell: powershell` were all measured against a missing binary and all four
+error, so there is no form that fails quietly.
 
-`/timeline` needs Python 3 on all platforms, including Windows.
+A single `node` entry point is the only arrangement that avoids the error on
+Windows, macOS and Linux alike.
+
+`/timeline` additionally needs Python 3, but it is a command you run explicitly
+rather than a hook, so a missing Python is a plain error rather than noise on
+every prompt.
 
 ## Failure behaviour
 

@@ -93,6 +93,9 @@ if ($p.hook_event_name -ne 'MessageDisplay') { exit 0 }
 if ($p.final -ne $true) { exit 0 }
 if (-not $p.delta) { exit 0 }
 
+$mode = Opt 'stamp_mode' 'once'
+if ($mode -eq 'off') { exit 0 }
+
 try {
     $startEpoch = [double]([System.IO.File]::ReadAllText((StatePath $session)).Trim())
 } catch { exit 0 }
@@ -102,6 +105,29 @@ if ($nowEpoch -lt $startEpoch) { exit 0 }
 
 $start = [DateTimeOffset]::FromUnixTimeMilliseconds([long]($startEpoch * 1000)).LocalDateTime
 $now   = [DateTimeOffset]::FromUnixTimeMilliseconds([long]($nowEpoch   * 1000)).LocalDateTime
+
+# A turn emits one MessageDisplay per assistant message, and nothing at display
+# time reveals which will be the turn's last. Stamping all of them buries the
+# transcript, so by default only the first is stamped, showing the start.
+# Claude Code's own "Baked for" line closes the range.
+if ($mode -ne 'every') {
+    $marker = (StatePath $session) + '.turn'
+    $turn = [string]$p.turn_id
+    try {
+        if ((Test-Path $marker) -and
+            ([System.IO.File]::ReadAllText($marker).Trim() -eq $turn)) { exit 0 }
+    } catch { }
+    try { [System.IO.File]::WriteAllText($marker, $turn) } catch { }
+
+    $out = @{
+        hookSpecificOutput = @{
+            hookEventName  = 'MessageDisplay'
+            displayContent = "$($p.delta)`n`n$GLYPH Started $(Clock $start)"
+        }
+    }
+    Write-Output (AsciiJson $out)
+    exit 0
+}
 
 $parts = @("$GLYPH")
 if ((Opt 'show_duration' 'true') -ne 'false') {

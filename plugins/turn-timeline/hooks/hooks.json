@@ -6,8 +6,8 @@
           {
             "type": "command",
             "timeout": 5,
-            "command": "python3",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.py"]
+            "command": "sh",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.sh"]
           },
           {
             "type": "command",
@@ -24,8 +24,8 @@
           {
             "type": "command",
             "timeout": 5,
-            "command": "python3",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.py"]
+            "command": "sh",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.sh"]
           },
           {
             "type": "command",

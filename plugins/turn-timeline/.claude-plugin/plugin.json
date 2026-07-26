@@ -3,7 +3,7 @@
   "name": "turn-timeline",
   "displayName": "Turn Timeline",
   "description": "Adds the wall-clock range to Claude Code's turn output, so you see not just how long a turn took but from when to when. Includes a /timeline report over any past session.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "MIT",
   "author": {
     "name": "NoiceHax"
@@ -12,6 +12,12 @@
   "repository": "https://github.com/NoiceHax/vibecoolertunes",
   "keywords": ["timing", "hooks", "analytics", "timeline", "productivity"],
   "userConfig": {
+    "stamp_mode": {
+      "type": "string",
+      "title": "How often to stamp",
+      "description": "once = one line per turn showing the start time, which pairs with Claude Code's own 'Baked for' line. every = a full range on every assistant message, which is noisy in tool-heavy turns. off = no inline stamp, use /timeline only.",
+      "default": "once"
+    },
     "show_duration": {
       "type": "boolean",
       "title": "Include the duration in the stamp",

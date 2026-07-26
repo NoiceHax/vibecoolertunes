@@ -97,6 +97,10 @@ def main():
     if event != "MessageDisplay" or not payload.get("final"):
         return
 
+    mode = opt("stamp_mode", "once")
+    if mode == "off":
+        return
+
     delta = payload.get("delta")
     if not delta:
         return
@@ -111,6 +115,28 @@ def main():
     if now < start:
         return
 
+    # A turn emits one MessageDisplay per assistant message, and nothing at
+    # display time reveals which will be the turn's last. Stamping all of them
+    # buries the transcript, so by default only the first is stamped, showing
+    # the start. Claude Code's own "Baked for" line closes the range.
+    if mode != "every":
+        marker = state_path(session) + ".turn"
+        turn = str(payload.get("turn_id", ""))
+        try:
+            with open(marker) as fh:
+                if fh.read().strip() == turn:
+                    return
+        except OSError:
+            pass
+        try:
+            with open(marker, "w") as fh:
+                fh.write(turn)
+        except OSError:
+            pass
+        line = "%s Started %s" % (GLYPH, clock(start))
+        emit(delta, line)
+        return
+
     parts = [GLYPH]
     if opt("show_duration", "true") != "false":
         parts.append("Baked for %s" % human(now - start))
@@ -123,6 +149,10 @@ def main():
 
     line = " ".join(parts)
 
+    emit(delta, line)
+
+
+def emit(delta, line):
     json.dump(
         {
             "hookSpecificOutput": {

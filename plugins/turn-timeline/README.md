@@ -4,15 +4,19 @@ Claude Code tells you a turn took `3m 21s`. It never tells you *from when to
 when*. This adds that.
 
 ```
-Here is my answer.
+I'll dig into the repo to find what's issuing the redirect.
 
-✻ Baked for 3m 21s from 3:06:09 am to 3:09:30 am · still warm
-✻ Baked for 3m 21s
+✻ Started 1:16:54 pm
+
+  … tool calls, more messages …
+
+✻ Baked for 1m 58s
 ```
 
-The second line is Claude Code's own. See [Two lines, not one](#two-lines-not-one).
+One line at the top of the turn, Claude Code's own line at the bottom. Together
+they give you the full range.
 
-It also ships `/timeline`, a report over any session you have already run:
+It also ships `/timeline`, a report over sessions you have already run:
 
 ```
   #  started       ended         elapsed    prompt
@@ -34,6 +38,9 @@ It also ships `/timeline`, a report over any session you have already run:
 /reload-plugins
 ```
 
+Updating later needs `/plugin update turn-timeline@vibecoolertunes`. Plain
+`install` is a no-op when any version is already present.
+
 ## How the live stamp works
 
 A `MessageDisplay` hook returns `hookSpecificOutput.displayContent`, which
@@ -48,31 +55,23 @@ would never see it.
 Turn start comes from a `UserPromptSubmit` hook writing one epoch timestamp to a
 small state file. That hook deliberately prints nothing, for the same reason.
 
-## Two lines, not one
+## Why one stamp per turn, not per message
 
-Claude Code's own `✻ Baked for 3m 21s` still renders below the stamp and cannot
-be suppressed. So by default you see the duration twice.
-
-The two are also measured at slightly different moments. This stamp is written
-when the final assistant message is displayed; Claude Code's is computed at turn
-end, marginally later. They can disagree by a second.
-
-Set `show_duration` to `false` for a line that complements rather than repeats:
+`MessageDisplay` fires once per assistant message, and **nothing in its payload
+reveals which message will be the turn's last.** A tool-heavy turn produces one
+event per narration line, so stamping all of them looks like this:
 
 ```
-✻ 3:06:09 am to 3:09:30 am · still warm
-✻ Baked for 3m 21s
+✻ Baked for 5s    from 1:16:54 pm to 1:16:59 pm
+✻ Baked for 1m 14s from 1:16:54 pm to 1:18:08 pm
+✻ Baked for 1m 33s from 1:16:54 pm to 1:18:26 pm
+✻ Baked for 1m 53s from 1:16:54 pm to 1:18:47 pm
 ```
 
-## One stamp per assistant message
-
-The hook fires once per assistant message, not once per turn and not per
-streaming chunk. A turn with six tool calls produces six stamps, each showing
-the turn start and that message's finish time.
-
-There is no way to know at display time which message will be the turn's last,
-so this is not avoidable. Read them as phase timings: the last one, sitting
-directly above Claude Code's line, is the one that describes the whole turn.
+Every line is correct and the whole thing is unreadable. So the default stamps
+only the **first** message of each turn, with the start time, and lets Claude
+Code's own closing line supply the duration. Set `stamp_mode` to `every` if you
+want per-phase timings back.
 
 ## Configuration
 
@@ -81,20 +80,23 @@ Set via `/plugin configure turn-timeline@vibecoolertunes`, then
 
 | Option | Default | Effect |
 | :--- | :--- | :--- |
-| `show_duration` | `true` | Set `false` to drop the duplicated duration and show only the range. |
-| `closing_line` | `true` | Set `false` to drop the flourish. |
+| `stamp_mode` | `once` | `once` = one line per turn showing the start. `every` = full range on every assistant message. `off` = no inline stamp, `/timeline` only. |
+| `show_duration` | `true` | `every` mode only. Set `false` to drop the duration, which Claude Code prints anyway, and show just the range. |
+| `closing_line` | `true` | `every` mode only. Set `false` to drop the flourish. |
 | `clock_format` | `12` | Set `24` for `15:06:09`. |
 
 ## Requirements
 
 | Platform | Runtime | Notes |
 | :--- | :--- | :--- |
-| macOS, Linux | `python3` | Usually preinstalled |
+| macOS, Linux | `sh` + `python3` (or `python`) | Both normally present |
 | Windows | PowerShell | Built in |
 
-Both hook entries register on every platform and each script exits immediately
-on the other one, so exactly one ever produces output. If neither runtime is
-available the stamp is skipped and your message displays normally.
+The POSIX hook entry invokes `sh`, which then locates Python, rather than
+invoking `python3` directly. Naming `python3` as the hook command makes Claude
+Code report a visible `Executable not found in $PATH: "python3"` error on every
+prompt on Windows, where that name does not resolve. Going through `sh` keeps
+that case quiet.
 
 `/timeline` needs Python 3 on all platforms, including Windows.
 
@@ -102,24 +104,28 @@ available the stamp is skipped and your message displays normally.
 
 Every failure path exits 0 and prints nothing, which leaves the message
 displayed exactly as it would have been. Malformed input, a missing state file,
-an unreadable clock: all produce no stamp rather than a broken one. **A timing
+no Python installed: all produce no stamp rather than a broken one. **A timing
 gimmick must never corrupt your actual output.**
 
 The hook is synchronous in the render path and cannot be `async`, because its
-output is the point. It has a 5 second timeout. Cost is roughly 150 ms per
-message on Windows, near zero on macOS and Linux.
+output is the point. It has a 5 second timeout.
+
+Both scripts read stdin as UTF-8 explicitly. Decoding it with the console code
+page instead silently corrupts every non-ASCII character in the message: an em
+dash round-trips to `ΓÇö`, an accented `e` to `├⌐`.
 
 ## How /timeline works
 
 No hooks and no state. Claude Code already writes a `system` record with
 `subtype: "turn_duration"` carrying the turn's `durationMs` and its end
 `timestamp`, so the start is simply end minus duration. That means the report
-works **retroactively on every session you have ever run**, including ones from
-before you installed this.
+works **retroactively on interactive sessions you ran before installing this**.
+
+**Headless `claude -p` sessions write no `turn_duration` records**, so the report
+has nothing to read for those and says so rather than inventing numbers.
 
 `turn_duration` is an internal transcript detail, not a documented API. If the
-format changes the report prints "no turn_duration records" rather than
-inventing numbers.
+format changes the report degrades the same way.
 
 ## License
 

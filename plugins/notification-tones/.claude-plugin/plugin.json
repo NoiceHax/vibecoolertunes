@@ -3,7 +3,7 @@
   "name": "notification-tones",
   "displayName": "Notification Tones",
   "description": "Distinct musical tones for each reason Claude Code stops, so you can tell from another room whether it finished, needs permission, or is waiting on an answer.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "author": {
     "name": "NoiceHax"

@@ -3,7 +3,7 @@
   "name": "turn-timeline",
   "displayName": "Turn Timeline",
   "description": "Adds the wall-clock range to Claude Code's turn output, so you see not just how long a turn took but from when to when. Includes a /timeline report over any past session.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "author": {
     "name": "NoiceHax"

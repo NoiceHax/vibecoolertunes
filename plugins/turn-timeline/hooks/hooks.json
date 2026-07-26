@@ -6,14 +6,8 @@
           {
             "type": "command",
             "timeout": 5,
-            "command": "sh",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.sh"]
-          },
-          {
-            "type": "command",
-            "timeout": 5,
-            "command": "powershell",
-            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/stamp.ps1"]
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.js"]
           }
         ]
       }
@@ -24,14 +18,8 @@
           {
             "type": "command",
             "timeout": 5,
-            "command": "sh",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.sh"]
-          },
-          {
-            "type": "command",
-            "timeout": 5,
-            "command": "powershell",
-            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/stamp.ps1"]
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/stamp.js"]
           }
         ]
       }

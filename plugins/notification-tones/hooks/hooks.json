@@ -6,14 +6,11 @@
           {
             "type": "command",
             "async": true,
-            "command": "sh",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/play.sh", "complete"]
-          },
-          {
-            "type": "command",
-            "async": true,
-            "command": "powershell",
-            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/play.ps1", "complete"]
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/scripts/dispatch.js",
+              "complete"
+            ]
           }
         ]
       }
@@ -25,14 +22,11 @@
           {
             "type": "command",
             "async": true,
-            "command": "sh",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/play.sh", "permission"]
-          },
-          {
-            "type": "command",
-            "async": true,
-            "command": "powershell",
-            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/play.ps1", "permission"]
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/scripts/dispatch.js",
+              "permission"
+            ]
           }
         ]
       },
@@ -42,14 +36,11 @@
           {
             "type": "command",
             "async": true,
-            "command": "sh",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/play.sh", "question"]
-          },
-          {
-            "type": "command",
-            "async": true,
-            "command": "powershell",
-            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/play.ps1", "question"]
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/scripts/dispatch.js",
+              "question"
+            ]
           }
         ]
       }
